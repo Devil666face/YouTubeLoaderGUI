@@ -54,7 +54,9 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../animatedlabel.cpp \
 		../database.cpp \
-		../loadingwindow.cpp \
+		../download_thread.cpp \
+		../downloaddialog.cpp \
+		../loadingdialog.cpp \
 		../main.cpp \
 		../mainwindow.cpp \
 		../playlist.cpp \
@@ -62,12 +64,16 @@ SOURCES       = ../animatedlabel.cpp \
 		../video.cpp qrc_res.cpp \
 		moc_animatedlabel.cpp \
 		moc_database.cpp \
-		moc_loadingwindow.cpp \
+		moc_download_thread.cpp \
+		moc_downloaddialog.cpp \
+		moc_loadingdialog.cpp \
 		moc_mainwindow.cpp \
 		moc_thread.cpp
 OBJECTS       = animatedlabel.o \
 		database.o \
-		loadingwindow.o \
+		download_thread.o \
+		downloaddialog.o \
+		loadingdialog.o \
 		main.o \
 		mainwindow.o \
 		playlist.o \
@@ -76,7 +82,9 @@ OBJECTS       = animatedlabel.o \
 		qrc_res.o \
 		moc_animatedlabel.o \
 		moc_database.o \
-		moc_loadingwindow.o \
+		moc_download_thread.o \
+		moc_downloaddialog.o \
+		moc_loadingdialog.o \
 		moc_mainwindow.o \
 		moc_thread.o
 DIST          = /usr/local/Qt5.14.2/5.14.2/gcc_64/mkspecs/features/spec_pre.prf \
@@ -292,13 +300,17 @@ DIST          = /usr/local/Qt5.14.2/5.14.2/gcc_64/mkspecs/features/spec_pre.prf 
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/mkspecs/features/lex.prf \
 		../../YouTubeLoader.pro ../animatedlabel.h \
 		../database.h \
-		../loadingwindow.h \
+		../download_thread.h \
+		../downloaddialog.h \
+		../loadingdialog.h \
 		../mainwindow.h \
 		../playlist.h \
 		../thread.h \
 		../video.h ../animatedlabel.cpp \
 		../database.cpp \
-		../loadingwindow.cpp \
+		../download_thread.cpp \
+		../downloaddialog.cpp \
+		../loadingdialog.cpp \
 		../main.cpp \
 		../mainwindow.cpp \
 		../playlist.cpp \
@@ -312,7 +324,7 @@ TARGET        = YouTubeLoader
 first: all
 ####### Build rules
 
-YouTubeLoader: ui_loadingwindow.h ui_mainwindow.h $(OBJECTS)  
+YouTubeLoader: ui_downloaddialog.h ui_loadingdialog.h ui_mainwindow.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../YouTubeLoader.pro /usr/local/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf /usr/local/Qt5.14.2/5.14.2/gcc_64/mkspecs/features/spec_pre.prf \
@@ -758,9 +770,9 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../res.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/local/Qt5.14.2/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../animatedlabel.h ../database.h ../loadingwindow.h ../mainwindow.h ../playlist.h ../thread.h ../video.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../animatedlabel.cpp ../database.cpp ../loadingwindow.cpp ../main.cpp ../mainwindow.cpp ../playlist.cpp ../thread.cpp ../video.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../loadingwindow.ui ../mainwindow.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../animatedlabel.h ../database.h ../download_thread.h ../downloaddialog.h ../loadingdialog.h ../mainwindow.h ../playlist.h ../thread.h ../video.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../animatedlabel.cpp ../database.cpp ../download_thread.cpp ../downloaddialog.cpp ../loadingdialog.cpp ../main.cpp ../mainwindow.cpp ../playlist.cpp ../thread.cpp ../video.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../downloaddialog.ui ../loadingdialog.ui ../mainwindow.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -802,9 +814,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/local/Qt5.14.2/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /usr/local/Qt5.14.2/5.14.2/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_animatedlabel.cpp moc_database.cpp moc_loadingwindow.cpp moc_mainwindow.cpp moc_thread.cpp
+compiler_moc_header_make_all: moc_animatedlabel.cpp moc_database.cpp moc_download_thread.cpp moc_downloaddialog.cpp moc_loadingdialog.cpp moc_mainwindow.cpp moc_thread.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_animatedlabel.cpp moc_database.cpp moc_loadingwindow.cpp moc_mainwindow.cpp moc_thread.cpp
+	-$(DEL_FILE) moc_animatedlabel.cpp moc_database.cpp moc_download_thread.cpp moc_downloaddialog.cpp moc_loadingdialog.cpp moc_mainwindow.cpp moc_thread.cpp
 moc_animatedlabel.cpp: ../animatedlabel.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/QObject \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobject.h \
@@ -1088,9 +1100,129 @@ moc_database.cpp: ../database.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/moc
 	/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/king/QtProject/YouTubeLoader/build/moc_predefs.h -I/usr/local/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/king/QtProject/YouTubeLoader -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../database.h -o moc_database.cpp
 
-moc_loadingwindow.cpp: ../loadingwindow.h \
-		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QMainWindow \
-		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qmainwindow.h \
+moc_download_thread.cpp: ../download_thread.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/QThread \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qthread.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobject.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qnamespace.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qglobal.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qconfig.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qtcore-config.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsysinfo.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qlogging.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qflags.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmutex.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qnumeric.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qversiontagging.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstring.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qchar.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qbytearray.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qrefcount.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qarraydata.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringliteral.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringview.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qlist.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qalgorithms.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qiterator.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qhashfunctions.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qpair.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qvector.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qpoint.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qbytearraylist.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringlist.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qregexp.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcoreevent.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmetatype.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobject_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/QProcess \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qprocess.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qiodevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qshareddata.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qhash.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/QDebug \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qdebug.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmap.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qtextstream.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qlocale.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qvariant.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qset.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QApplication \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qapplication.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtguiglobal.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtgui-config.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcoreapplication.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qeventloop.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsize.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmargins.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qcursor.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qwidget.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpaintdevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qrect.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpalette.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qcolor.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qrgb.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qrgba64.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qbrush.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qmatrix.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpolygon.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qregion.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qdatastream.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qline.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtransform.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpainterpath.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qimage.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpixelformat.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpixmap.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qfont.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qfontmetrics.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qfontinfo.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qkeysequence.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qevent.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qurl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qurlquery.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qfile.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qfiledevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qvector2d.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtouchdevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qguiapplication.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qinputmethod.h \
+		moc_predefs.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/moc
+	/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/king/QtProject/YouTubeLoader/build/moc_predefs.h -I/usr/local/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/king/QtProject/YouTubeLoader -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../download_thread.h -o moc_download_thread.cpp
+
+moc_downloaddialog.cpp: ../downloaddialog.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QDialog \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qdialog.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtguiglobal.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qglobal.h \
@@ -1194,8 +1326,116 @@ moc_loadingwindow.cpp: ../loadingwindow.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qfiledevice.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qvector2d.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtouchdevice.h \
-		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qtabwidget.h \
-		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qicon.h \
+		moc_predefs.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/moc
+	/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/king/QtProject/YouTubeLoader/build/moc_predefs.h -I/usr/local/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/king/QtProject/YouTubeLoader -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../downloaddialog.h -o moc_downloaddialog.cpp
+
+moc_loadingdialog.cpp: ../loadingdialog.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QDialog \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qdialog.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtguiglobal.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qglobal.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qconfig.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qtcore-config.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsysinfo.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qlogging.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qflags.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmutex.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qnumeric.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qversiontagging.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtgui-config.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qwidget.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qnamespace.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobject.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstring.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qchar.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qbytearray.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qrefcount.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qarraydata.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringliteral.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringview.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qlist.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qalgorithms.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qiterator.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qhashfunctions.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qpair.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qvector.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qpoint.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qbytearraylist.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringlist.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qregexp.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcoreevent.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmetatype.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobject_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmargins.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpaintdevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qrect.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsize.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpalette.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qcolor.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qrgb.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qrgba64.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qbrush.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qmatrix.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpolygon.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qregion.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qdatastream.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qiodevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qline.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtransform.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpainterpath.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qimage.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpixelformat.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpixmap.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qshareddata.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qhash.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qfont.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qfontmetrics.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qfontinfo.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qcursor.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qkeysequence.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qevent.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qvariant.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmap.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qdebug.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qtextstream.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qlocale.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qset.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qurl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qurlquery.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qfile.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qfiledevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qvector2d.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtouchdevice.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/QMovie \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qmovie.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qimagereader.h \
@@ -1209,11 +1449,12 @@ moc_loadingwindow.cpp: ../loadingwindow.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qfactoryinterface.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QStyle \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qstyle.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qicon.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QDesktopWidget \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
 		moc_predefs.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/king/QtProject/YouTubeLoader/build/moc_predefs.h -I/usr/local/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/king/QtProject/YouTubeLoader -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../loadingwindow.h -o moc_loadingwindow.cpp
+	/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/king/QtProject/YouTubeLoader/build/moc_predefs.h -I/usr/local/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/king/QtProject/YouTubeLoader -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../loadingdialog.h -o moc_loadingdialog.cpp
 
 moc_mainwindow.cpp: ../mainwindow.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QMainWindow \
@@ -1418,7 +1659,11 @@ moc_mainwindow.cpp: ../mainwindow.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/QtMath \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmath.h \
-		../loadingwindow.h \
+		../download_thread.h \
+		../downloaddialog.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QDialog \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qdialog.h \
+		../loadingdialog.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QStyle \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QDesktopWidget \
 		moc_predefs.h \
@@ -1549,12 +1794,16 @@ compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_loadingwindow.h ui_mainwindow.h
+compiler_uic_make_all: ui_downloaddialog.h ui_loadingdialog.h ui_mainwindow.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_loadingwindow.h ui_mainwindow.h
-ui_loadingwindow.h: ../loadingwindow.ui \
+	-$(DEL_FILE) ui_downloaddialog.h ui_loadingdialog.h ui_mainwindow.h
+ui_downloaddialog.h: ../downloaddialog.ui \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/uic
-	/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/uic ../loadingwindow.ui -o ui_loadingwindow.h
+	/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/uic ../downloaddialog.ui -o ui_downloaddialog.h
+
+ui_loadingdialog.h: ../loadingdialog.ui \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/uic
+	/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/uic ../loadingdialog.ui -o ui_loadingdialog.h
 
 ui_mainwindow.h: ../mainwindow.ui \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/bin/uic
@@ -1849,9 +2098,127 @@ database.o: ../database.cpp ../database.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork/QNetworkRequest
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o database.o ../database.cpp
 
-loadingwindow.o: ../loadingwindow.cpp ../loadingwindow.h \
-		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QMainWindow \
-		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qmainwindow.h \
+download_thread.o: ../download_thread.cpp ../download_thread.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/QThread \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qthread.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobject.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qnamespace.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qglobal.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qconfig.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qtcore-config.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsysinfo.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qlogging.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qflags.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmutex.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qnumeric.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qversiontagging.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstring.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qchar.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qbytearray.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qrefcount.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qarraydata.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringliteral.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringview.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qlist.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qalgorithms.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qiterator.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qhashfunctions.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qpair.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qvector.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qpoint.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qbytearraylist.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringlist.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qregexp.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcoreevent.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmetatype.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobject_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/QProcess \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qprocess.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qiodevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qshareddata.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qhash.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/QDebug \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qdebug.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmap.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qtextstream.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qlocale.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qvariant.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qset.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QApplication \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qapplication.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtguiglobal.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtgui-config.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcoreapplication.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qeventloop.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsize.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmargins.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qcursor.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qwidget.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpaintdevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qrect.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpalette.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qcolor.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qrgb.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qrgba64.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qbrush.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qmatrix.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpolygon.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qregion.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qdatastream.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qline.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtransform.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpainterpath.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qimage.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpixelformat.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpixmap.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qfont.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qfontmetrics.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qfontinfo.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qkeysequence.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qevent.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qurl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qurlquery.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qfile.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qfiledevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qvector2d.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtouchdevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qguiapplication.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qinputmethod.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o download_thread.o ../download_thread.cpp
+
+downloaddialog.o: ../downloaddialog.cpp ../downloaddialog.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QDialog \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qdialog.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtguiglobal.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qglobal.h \
@@ -1955,8 +2322,133 @@ loadingwindow.o: ../loadingwindow.cpp ../loadingwindow.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qfiledevice.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qvector2d.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtouchdevice.h \
-		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qtabwidget.h \
-		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qicon.h \
+		ui_downloaddialog.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/QVariant \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QApplication \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qapplication.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcoreapplication.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qeventloop.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qguiapplication.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qinputmethod.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QFrame \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qframe.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QHBoxLayout \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qboxlayout.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qlayout.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qgridlayout.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QLabel \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qlabel.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QVBoxLayout
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o downloaddialog.o ../downloaddialog.cpp
+
+loadingdialog.o: ../loadingdialog.cpp ../loadingdialog.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QDialog \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qdialog.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtguiglobal.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qglobal.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qconfig.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qtcore-config.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsystemdetection.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qprocessordetection.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcompilerdetection.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qtypeinfo.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsysinfo.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qlogging.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qflags.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qbasicatomic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qgenericatomic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qatomic_msvc.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qglobalstatic.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmutex.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qnumeric.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qversiontagging.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtgui-config.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qwidget.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qwindowdefs.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobjectdefs.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qnamespace.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobject.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstring.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qchar.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qbytearray.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qrefcount.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qarraydata.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringliteral.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringalgorithms.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringview.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringbuilder.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qlist.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qalgorithms.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qiterator.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qhashfunctions.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qpair.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qvector.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcontainertools_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qpoint.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qbytearraylist.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringlist.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qregexp.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qstringmatcher.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcoreevent.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qscopedpointer.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmetatype.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qvarlengtharray.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcontainerfwd.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobject_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmargins.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpaintdevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qrect.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsize.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpalette.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qcolor.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qrgb.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qrgba64.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qbrush.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qmatrix.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpolygon.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qregion.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qdatastream.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qiodevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qline.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtransform.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpainterpath.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qimage.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpixelformat.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpixmap.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qshareddata.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qhash.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qfont.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qfontmetrics.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qfontinfo.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qcursor.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qkeysequence.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qevent.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qvariant.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmap.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qdebug.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qtextstream.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qlocale.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qset.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qcontiguouscache.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qurl.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qurlquery.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qfile.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qfiledevice.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qvector2d.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtouchdevice.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/QMovie \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qmovie.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qimagereader.h \
@@ -1970,10 +2462,24 @@ loadingwindow.o: ../loadingwindow.cpp ../loadingwindow.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qfactoryinterface.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QStyle \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qstyle.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qicon.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QDesktopWidget \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qdesktopwidget.h \
-		ui_loadingwindow.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o loadingwindow.o ../loadingwindow.cpp
+		ui_loadingdialog.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/QVariant \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QApplication \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qapplication.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qguiapplication.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qinputmethod.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QLabel \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qlabel.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qframe.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QVBoxLayout \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qboxlayout.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qlayout.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qgridlayout.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o loadingdialog.o ../loadingdialog.cpp
 
 main.o: ../main.cpp ../mainwindow.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QMainWindow \
@@ -2178,7 +2684,11 @@ main.o: ../main.cpp ../mainwindow.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/QtMath \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmath.h \
-		../loadingwindow.h \
+		../download_thread.h \
+		../downloaddialog.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QDialog \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qdialog.h \
+		../loadingdialog.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QStyle \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QDesktopWidget \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/QFile
@@ -2387,10 +2897,38 @@ mainwindow.o: ../mainwindow.cpp ../mainwindow.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork/QNetworkRequest \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/QtMath \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtCore/qmath.h \
-		../loadingwindow.h \
+		../download_thread.h \
+		../downloaddialog.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QDialog \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qdialog.h \
+		../loadingdialog.h \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QStyle \
 		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QDesktopWidget \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/QIcon \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QFrame \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QGridLayout \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QGroupBox \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qgroupbox.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QHBoxLayout \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QHeaderView \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qheaderview.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QLineEdit \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qlineedit.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtextcursor.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtextformat.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpen.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtGui/qtextoption.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QMenuBar \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qmenubar.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qmenu.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qaction.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qactiongroup.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QStatusBar \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qstatusbar.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QToolBar \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/qtoolbar.h \
+		/usr/local/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../mainwindow.cpp
 
 playlist.o: ../playlist.cpp ../playlist.h \
@@ -2741,8 +3279,14 @@ moc_animatedlabel.o: moc_animatedlabel.cpp
 moc_database.o: moc_database.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_database.o moc_database.cpp
 
-moc_loadingwindow.o: moc_loadingwindow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_loadingwindow.o moc_loadingwindow.cpp
+moc_download_thread.o: moc_download_thread.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_download_thread.o moc_download_thread.cpp
+
+moc_downloaddialog.o: moc_downloaddialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_downloaddialog.o moc_downloaddialog.cpp
+
+moc_loadingdialog.o: moc_loadingdialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_loadingdialog.o moc_loadingdialog.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

@@ -12,7 +12,7 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QDialog>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -25,7 +25,7 @@ public:
     QVBoxLayout *verticalLayout;
     QLabel *label_loading;
 
-    void setupUi(QMainWindow *LoadingWindow)
+    void setupUi(QDialog *LoadingWindow)
     {
         if (LoadingWindow->objectName().isEmpty())
             LoadingWindow->setObjectName(QString::fromUtf8("LoadingWindow"));
@@ -39,14 +39,12 @@ public:
 
         verticalLayout->addWidget(label_loading);
 
-        LoadingWindow->setCentralWidget(centralwidget);
-
         retranslateUi(LoadingWindow);
 
         QMetaObject::connectSlotsByName(LoadingWindow);
     } // setupUi
 
-    void retranslateUi(QMainWindow *LoadingWindow)
+    void retranslateUi(QDialog *LoadingWindow)
     {
         LoadingWindow->setWindowTitle(QCoreApplication::translate("LoadingWindow", "\320\237\320\276\320\264\320\276\320\266\320\264\320\270\321\202\320\265... \320\230\320\264\320\265\321\202 \320\267\320\260\320\263\321\200\321\203\320\267\320\272\320\260...", nullptr));
         label_loading->setText(QCoreApplication::translate("LoadingWindow", "TextLabel", nullptr));

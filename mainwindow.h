@@ -15,7 +15,9 @@
 #include <playlist.h>
 #include <video.h>
 #include <QtMath>
-#include <loadingwindow.h>
+#include <download_thread.h>
+#include <downloaddialog.h>
+#include <loadingdialog.h>
 
 
 QT_BEGIN_NAMESPACE
@@ -53,6 +55,7 @@ private slots:
     void on_pushButton_video_clicked();
     void on_pushButton_playlist_clicked();
     void parsing_finished();
+    void download_video_finished(QString url_to_video, QString playlist_name);
 
     void on_download_check_stateChanged(int arg1);
 
@@ -60,7 +63,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    LoadingWindow *loadwin;
 
 };
 #endif // MAINWINDOW_H

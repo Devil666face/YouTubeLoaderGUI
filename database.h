@@ -15,6 +15,8 @@ class Database : public QObject, public QSqlDatabase
 public:
     Database(QString path_to_database);
     QVector <Playlist> load_playlists();
+    QImage get_image_for_video_url(QString url);
+    QString get_title_for_video_url(QString url);
 
 private:
     QSqlDatabase DB;

@@ -168,12 +168,9 @@ void MainWindow::on_pushButton_load_clicked()
     connect(parsing_thread, SIGNAL(thread_finish()),this,SLOT(parsing_finished()));
     parsing_thread->start();
 
-    loadwin = new LoadingWindow(this);
-//    loadwin->setWindowModality(Qt::WindowModal);
-    loadwin->setWindowModality(Qt::ApplicationModal);
-    loadwin->show();
-
-    connect(parsing_thread,SIGNAL(thread_finish()),loadwin,SLOT(close_window()));
+    LoadingDialog *load_dialog = new LoadingDialog(this);
+    connect(parsing_thread,SIGNAL(thread_finish()),load_dialog,SLOT(close_window()));
+    load_dialog->exec();
 }
 
 void MainWindow::on_pushButton_video_clicked()
@@ -194,6 +191,15 @@ void MainWindow::parsing_finished()
     create_table_with_videos(ui->tableWidget,db->load_playlists());
 }
 
+void MainWindow::download_video_finished(QString url_to_video, QString playlist_name)
+{
+    qDebug()<<url_to_video<<playlist_name<<"Загрузка видео завершена";
+    DownloadDialog *dialog = new DownloadDialog(this,
+                                                db->get_image_for_video_url(url_to_video),
+                                                db->get_title_for_video_url(url_to_video));
+    dialog->exec();
+}
+
 void MainWindow::on_download_check_stateChanged(int arg1)
 {
     qDebug()<<sender()->objectName();/*.split("_")[1].toInt()*/
@@ -201,5 +207,8 @@ void MainWindow::on_download_check_stateChanged(int arg1)
 
 void MainWindow::on_download_button_clicked()
 {
-    qDebug()<<sender()->objectName();
+    QString url_to_video = sender()->objectName().replace("button_","");
+    download_thread *downloading = new download_thread(url_to_video,"");
+    connect(downloading, SIGNAL(download_finish(QString,QString)),this,SLOT(download_video_finished(QString,QString)));
+    downloading->start();
 }

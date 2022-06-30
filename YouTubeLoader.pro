@@ -18,7 +18,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     animatedlabel.cpp \
     database.cpp \
-    loadingwindow.cpp \
+    download_thread.cpp \
+    downloaddialog.cpp \
+    loadingdialog.cpp \
     main.cpp \
     mainwindow.cpp \
     playlist.cpp \
@@ -28,14 +30,17 @@ SOURCES += \
 HEADERS += \
     animatedlabel.h \
     database.h \
-    loadingwindow.h \
+    download_thread.h \
+    downloaddialog.h \
+    loadingdialog.h \
     mainwindow.h \
     playlist.h \
     thread.h \
     video.h
 
 FORMS += \
-    loadingwindow.ui \
+    downloaddialog.ui \
+    loadingdialog.ui \
     mainwindow.ui
 
 # Default rules for deployment.

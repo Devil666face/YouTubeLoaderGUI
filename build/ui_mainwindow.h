@@ -58,6 +58,7 @@ public:
         MainWindow->setWindowIcon(icon);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        centralwidget->setContextMenuPolicy(Qt::DefaultContextMenu);
         verticalLayout_4 = new QVBoxLayout(centralwidget);
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
         frame_search = new QFrame(centralwidget);
@@ -70,6 +71,7 @@ public:
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         groupBox_search = new QGroupBox(frame_search);
         groupBox_search->setObjectName(QString::fromUtf8("groupBox_search"));
+        groupBox_search->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         horizontalLayout = new QHBoxLayout(groupBox_search);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         lineEdit_url = new QLineEdit(groupBox_search);

@@ -46,6 +46,32 @@ QVector<Playlist> Database::load_playlists()
     return all_playlists;
 }
 
+QImage Database::get_image_for_video_url(QString url)
+{
+    QVector <Playlist> all_playlist = load_playlists();
+    foreach (auto playlist, all_playlist)
+    {
+        foreach (auto video, playlist.Videos)
+        {
+            if (url==video.Url)
+                return video.Image;
+        }
+    }
+}
+
+QString Database::get_title_for_video_url(QString url)
+{
+    QVector <Playlist> all_playlist = load_playlists();
+    foreach (auto playlist, all_playlist)
+    {
+        foreach (auto video, playlist.Videos)
+        {
+            if (url==video.Url)
+                return video.Title;
+        }
+    }
+}
+
 
 QImage Database::load_image(QByteArray blob)
 {
